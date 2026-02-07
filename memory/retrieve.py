@@ -1,56 +1,53 @@
-# memory/retrieve.py
+"""
+Memory retrieval module.
+Finds relevant past memories for the current question.
+"""
 
 from typing import List, Optional
 
+from db.vector_store import similarity_search
 
-def retrieve_relevant_memories(
-    user_input: str,
-    vector_store,  # This will come from Person 3
-    k: int = 3,
-    metadata_filter: Optional[dict] = None
-) -> List[str]:
+
+def retrieve_memories(query: str, session_id: Optional[str] = None, k: int = 3) -> List[dict]:
     """
     Find the most relevant past memories for the current question.
     
     Args:
-        user_input: Current user message
-        vector_store: The database (Person 3 provides this)
+        query: Current user message
+        session_id: Optional session filter (not used yet)
         k: How many memories to retrieve (default: 3)
-        metadata_filter: Optional filters (e.g., session_id)
         
     Returns:
-        List of memory strings, most relevant first
+        List of memory dicts with text and metadata
     """
-    
     try:
-        # This is how you'll call Person 3's code
-        results = vector_store.search(
-            query=user_input,
-            k=k,
-            filter=metadata_filter
-        )
+        results = similarity_search(query, k=k)
         
-        # Extract just the text from results
-        memories = [result["text"] for result in results]
+        # Convert Document objects to dicts
+        memories = []
+        for doc in results:
+            memories.append({
+                "text": doc.page_content,
+                "metadata": doc.metadata
+            })
         
         return memories
         
     except Exception as e:
         print(f"Error retrieving memories: {e}")
-        return []  # Return empty list if retrieval fails
+        return []
+
+
+def retrieve_relevant_memories(user_input: str, vector_store=None, k: int = 3, metadata_filter: Optional[dict] = None) -> List[str]:
+    """
+    Legacy interface - returns just the text strings.
+    """
+    memories = retrieve_memories(user_input, k=k)
+    return [m["text"] for m in memories]
 
 
 def format_memories_for_prompt(memories: List[str]) -> str:
-    """
-    Format retrieved memories into a nice text block for the LLM.
-    
-    Args:
-        memories: List of memory strings
-        
-    Returns:
-        Formatted string ready to inject into LLM prompt
-    """
-    
+    """Format retrieved memories into a text block for the LLM."""
     if not memories:
         return "No relevant past memories."
     
@@ -60,18 +57,3 @@ def format_memories_for_prompt(memories: List[str]) -> str:
     formatted += "================================\n"
     
     return formatted
-
-
-# Test function
-if __name__ == "__main__":
-    # Mock test without real database
-    print("Testing memory formatting...")
-    
-    fake_memories = [
-        "User's name is Alice.",
-        "User's favorite color is blue.",
-        "User lives in Seattle."
-    ]
-    
-    formatted = format_memories_for_prompt(fake_memories)
-    print(formatted)
