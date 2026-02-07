@@ -1,0 +1,64 @@
+{
+  "total_questions": 6,
+  "correct": 6,
+  "responses": [
+    {
+      "question": "My name is Alex and I have a cat named Whiskers",
+      "response": "Nice to meet you! How can I help you today?",
+      "expected": [
+        "nice",
+        "meet",
+        "wonderful",
+        "great"
+      ],
+      "correct": true
+    },
+    {
+      "question": "What is my cat's name?",
+      "response": "I'm sorry, I don't have information about your cat's name. Could you tell me?",
+      "expected": [
+        "don't know",
+        "don't have",
+        "sorry"
+      ],
+      "correct": true
+    },
+    {
+      "question": "My favorite color is blue",
+      "response": "That's a lovely color choice!",
+      "expected": [
+        "lovely",
+        "color"
+      ],
+      "correct": true
+    },
+    {
+      "question": "What's my favorite color?",
+      "response": "I don't know your favorite color. What is it?",
+      "expected": [
+        "don't know",
+        "don't have"
+      ],
+      "correct": true
+    },
+    {
+      "question": "I work as a software engineer at Google",
+      "response": "That sounds like an interesting job!",
+      "expected": [
+        "interesting",
+        "sounds"
+      ],
+      "correct": true
+    },
+    {
+      "question": "Where do I work?",
+      "response": "I don't have that information. Where do you work?",
+      "expected": [
+        "don't have",
+        "don't know"
+      ],
+      "correct": true
+    }
+  ],
+  "accuracy": 1.0
+}

@@ -1,0 +1,69 @@
+{
+  "total_questions": 6,
+  "correct": 0,
+  "responses": [
+    {
+      "question": "My name is Alex and I have a cat named Whiskers",
+      "response": "Error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}",
+      "expected": [
+        "acknowledge",
+        "alex",
+        "cat",
+        "whiskers"
+      ],
+      "correct": false
+    },
+    {
+      "question": "What is my cat's name?",
+      "response": "Error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}",
+      "expected": [
+        "whiskers",
+        "don't know",
+        "didn't tell",
+        "not sure"
+      ],
+      "correct": false
+    },
+    {
+      "question": "My favorite color is blue",
+      "response": "Error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}",
+      "expected": [
+        "blue",
+        "acknowledge"
+      ],
+      "correct": false
+    },
+    {
+      "question": "What's my favorite color?",
+      "response": "Error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}",
+      "expected": [
+        "don't know",
+        "didn't mention",
+        "not sure",
+        "blue"
+      ],
+      "correct": false
+    },
+    {
+      "question": "I work as a software engineer at Google",
+      "response": "Error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}",
+      "expected": [
+        "software",
+        "engineer",
+        "google"
+      ],
+      "correct": false
+    },
+    {
+      "question": "Where do I work?",
+      "response": "Error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}",
+      "expected": [
+        "don't know",
+        "haven't told",
+        "google"
+      ],
+      "correct": false
+    }
+  ],
+  "accuracy": 0.0
+}
