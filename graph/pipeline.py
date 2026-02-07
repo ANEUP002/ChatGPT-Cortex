@@ -1,57 +1,56 @@
+"""
+LangGraph pipeline for memory-augmented chat.
+Orchestrates: ingest → retrieve → generate → summarize → store
+"""
+
 from langgraph.graph import StateGraph, END
 from datetime import datetime
 
 from graph.state import MemoryState
-from memory.store import retrieve_memories, store_memory
+from memory.store import store_memory
+from memory.retrieve import retrieve_memories
+
 
 def ingest_input(state: MemoryState):
-    """
-    Entry Node which is responsible for stamping the metadata
-    
-    """
+    """Entry node - stamps metadata with timestamp."""
     return {
-        "metadata":{
+        "metadata": {
             **state["metadata"],
-            "timestamps":{
+            "timestamps": {
                 **state["metadata"].get("timestamps", {}),
-                "ingest_input":datetime.utcnow().isoformat(),
+                "ingest_input": datetime.utcnow().isoformat(),
             },
         }
     }
+
+
 def retrieve_memory(state: MemoryState):
-    """Retrieves memories relevant to the current user input
-    Storage mechanism is opaque to this layer.
-    """
+    """Retrieves memories relevant to the current user input."""
     memories = retrieve_memories(
-        session_id = state["metadata"]["session_id"],
         query=state["user_input"],
+        session_id=state["metadata"]["session_id"],
     )
-    return {"retrieved_memories":memories}
+    return {"retrieved_memories": memories}
 
-def generate_response(state:MemoryState):
-    """
-    generates the assistant response.
-    Actual LLM logic is intentionally abstracted
-    """
 
+def generate_response(state: MemoryState):
+    """Generates the assistant response. LLM logic abstracted."""
+    # TODO: Add actual LLM call with retrieved memories
     response = "This is a placeholder response."
-    return {"response":response}
+    return {"response": response}
 
 
 def summarize_interaction(state: MemoryState):
-    """Produces a compactsummary suitable for long-term memory"""
-    summary = f"User said:{state['user_input']}"
+    """Produces a compact summary suitable for long-term memory."""
+    summary = f"User said: {state['user_input']}"
     return {"summary": summary}
 
+
 def store_memory_node(state: MemoryState):
-    """
-    Single, explicit memory persistence point.
-    Saving is conditional and auditable.
-    """
+    """Single, explicit memory persistence point."""
     summary = state.get("summary")
     session_id = state["metadata"].get("session_id")
 
-    # Explicit guard: no implicit saves
     if not summary or not session_id:
         return {}
 
@@ -64,8 +63,8 @@ def store_memory_node(state: MemoryState):
     return {}
 
 
-###building the orchestration
 def build_graph():
+    """Build and compile the LangGraph state machine."""
     graph = StateGraph(MemoryState)
 
     graph.add_node("ingest_input", ingest_input)
