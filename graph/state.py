@@ -15,8 +15,8 @@ class MemoryState(TypedDict):
    ##raw user input
 
     user_input: str
-   #memories retrieved from storage
+   # memories retrieved from storage
     retrieved_memories : List[Dict[str,Any]]
-    ##Conversational summary(used for memory write-back)
+    ## Conversational summary(used for memory write-back)
     summary : Optional[str]
     metadata : Metadata
