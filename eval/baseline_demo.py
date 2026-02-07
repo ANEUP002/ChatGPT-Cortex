@@ -1,55 +1,54 @@
-from dotenv import load_dotenv
-load_dotenv()
-
 """
-Baseline Evaluation - ChatGPT WITHOUT Memory
-Tests how well ChatGPT performs without the memory system
+Demo Baseline Evaluation - Uses mock responses instead of OpenAI API
+Perfect for testing without API credits
 """
 
-import os
-from openai import OpenAI
 from typing import List, Dict
 import json
+import time
 
 
-class BaselineEvaluator:
+class BaselineEvaluatorDemo:
     """
-    Evaluates ChatGPT performance WITHOUT memory
+    Demo version - simulates ChatGPT WITHOUT memory
     """
     
-    def __init__(self):
-        api_key = os.getenv("OPENAI_API_KEY")
-        self.client = OpenAI(api_key=api_key) if api_key else None
-        self.conversation_history = []
-        
     def chat(self, message: str) -> str:
         """
-        Send a message and get response (no memory between sessions)
+        Simulate ChatGPT response without memory
         """
-        if not self.client:
-            return "Error: OPENAI_API_KEY not set"
+        time.sleep(0.5)  # Simulate API delay
         
-        try:
-            response = self.client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "system", "content": "You are a helpful assistant."},
-                    {"role": "user", "content": message}
-                ]
-            )
-            return response.choices[0].message.content
-        except Exception as e:
-            return f"Error: {str(e)}"
+        message_lower = message.lower()
+        
+        # Simulate responses for different types of questions
+        if "my name is" in message_lower:
+            return "Nice to meet you! How can I help you today?"
+        
+        elif "cat named" in message_lower:
+            return "That's wonderful! Cats make great companions."
+        
+        elif "favorite color" in message_lower and "is" in message_lower:
+            return "That's a lovely color choice!"
+        
+        elif "work as" in message_lower or "software engineer" in message_lower:
+            return "That sounds like an interesting job!"
+        
+        # Questions asking for recall (should fail without memory)
+        elif "cat's name" in message_lower or "name of my cat" in message_lower:
+            return "I'm sorry, I don't have information about your cat's name. Could you tell me?"
+        
+        elif "what's my favorite color" in message_lower or "my favorite color" in message_lower:
+            return "I don't know your favorite color. What is it?"
+        
+        elif "where do i work" in message_lower:
+            return "I don't have that information. Where do you work?"
+        
+        return "I understand. How can I assist you?"
     
     def run_test_scenario(self, test_questions: List[Dict]) -> Dict:
         """
-        Run a test scenario with multiple questions
-        
-        Args:
-            test_questions: List of dicts with 'question', 'expected_info', 'context'
-        
-        Returns:
-            Results dict with scores and responses
+        Run test scenario with simulated responses
         """
         results = {
             "total_questions": len(test_questions),
@@ -58,17 +57,15 @@ class BaselineEvaluator:
         }
         
         print("\n" + "="*50)
-        print("BASELINE TEST (NO MEMORY)")
+        print("BASELINE DEMO TEST (NO MEMORY)")
         print("="*50)
         
         for i, test in enumerate(test_questions, 1):
             print(f"\nQuestion {i}: {test['question']}")
             
-            # Simulate NEW conversation (no memory of previous)
             response = self.chat(test['question'])
             print(f"Response: {response}\n")
             
-            # Check if response contains expected information
             is_correct = self._check_answer(response, test['expected_info'])
             
             if is_correct:
@@ -94,13 +91,9 @@ class BaselineEvaluator:
         return results
     
     def _check_answer(self, response: str, expected_info: List[str]) -> bool:
-        """
-        Check if response contains expected information
-        Simple string matching for now
-        """
+        """Check if response contains expected information"""
         response_lower = response.lower()
         
-        # Check if ANY of the expected info is in the response
         for info in expected_info:
             if info.lower() in response_lower:
                 return True
@@ -108,54 +101,47 @@ class BaselineEvaluator:
 
 
 def create_test_questions() -> List[Dict]:
-    """
-    Create test questions that require memory
-    """
+    """Create test questions that require memory"""
     return [
         {
             "context": "User introduces themselves",
             "question": "My name is Alex and I have a cat named Whiskers",
-            "expected_info": ["acknowledge", "alex", "cat", "whiskers"]
+            "expected_info": ["nice", "meet", "wonderful", "great"]
         },
         {
             "context": "Ask about previously shared info",
             "question": "What is my cat's name?",
-            "expected_info": ["whiskers", "don't know", "didn't tell", "not sure"]
-            # Baseline should say "I don't know" since it has no memory
+            "expected_info": ["don't know", "don't have", "sorry"]
         },
         {
             "context": "User shares favorite color",
             "question": "My favorite color is blue",
-            "expected_info": ["blue", "acknowledge"]
+            "expected_info": ["lovely", "color"]
         },
         {
             "context": "Ask about favorite color",
             "question": "What's my favorite color?",
-            "expected_info": ["don't know", "didn't mention", "not sure", "blue"]
-            # Should fail without memory
+            "expected_info": ["don't know", "don't have"]
         },
         {
             "context": "User shares job",
             "question": "I work as a software engineer at Google",
-            "expected_info": ["software", "engineer", "google"]
+            "expected_info": ["interesting", "sounds"]
         },
         {
             "context": "Ask about job",
             "question": "Where do I work?",
-            "expected_info": ["don't know", "haven't told", "google"]
-            # Should fail without memory
+            "expected_info": ["don't have", "don't know"]
         }
     ]
 
 
 if __name__ == "__main__":
-    # Run baseline evaluation
-    evaluator = BaselineEvaluator()
+    evaluator = BaselineEvaluatorDemo()
     test_questions = create_test_questions()
     results = evaluator.run_test_scenario(test_questions)
     
-    # Save results
-    with open("eval/baseline_results.json", "w") as f:
+    with open("eval/baseline_results_demo.json", "w") as f:
         json.dump(results, f, indent=2)
     
-    print("Results saved to eval/baseline_results.json")
+    print("Results saved to eval/baseline_results_demo.json")

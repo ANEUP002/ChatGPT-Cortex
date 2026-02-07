@@ -1,0 +1,60 @@
+{
+  "total_questions": 6,
+  "correct": 5,
+  "responses": [
+    {
+      "question": "My name is Alex and I have a cat named Whiskers",
+      "response": "Nice to meet you, My name is Alex! I'll remember that.",
+      "expected": [
+        "alex",
+        "whiskers",
+        "remember"
+      ],
+      "correct": true
+    },
+    {
+      "question": "What is my cat's name?",
+      "response": "I don't think you've told me your cat's name yet.",
+      "expected": [
+        "whiskers"
+      ],
+      "correct": false
+    },
+    {
+      "question": "My favorite color is blue",
+      "response": "Got it! Your favorite color is blue. I'll remember that.",
+      "expected": [
+        "blue",
+        "remember"
+      ],
+      "correct": true
+    },
+    {
+      "question": "What's my favorite color?",
+      "response": "Your favorite color is blue!",
+      "expected": [
+        "blue"
+      ],
+      "correct": true
+    },
+    {
+      "question": "I work as a software engineer at Google",
+      "response": "Nice! Software engineer at Google - I'll remember that.",
+      "expected": [
+        "google",
+        "remember"
+      ],
+      "correct": true
+    },
+    {
+      "question": "Where do I work?",
+      "response": "You work as a software engineer at Google!",
+      "expected": [
+        "google",
+        "software engineer"
+      ],
+      "correct": true
+    }
+  ],
+  "accuracy": 0.8333333333333334
+}
