@@ -13,6 +13,8 @@ import logging
 
 from graph.pipeline import build_graph
 
+
+# Initialize logger
 logger = logging.getLogger(__name__)
 
 
